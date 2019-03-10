@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +21,7 @@ import point.Point;
 
 public class AI {
 	private List<Point> list;
-
+	String flower = null;
 	public AI() {
 		list = new ArrayList<>(); // List of training flowers
 	}
@@ -60,6 +62,7 @@ public class AI {
 		}
 		int actual = 0;
 		int total = 0;
+	
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(new File(filename)));
 			BufferedWriter write = new BufferedWriter(new FileWriter(new File(filename), true));
@@ -67,7 +70,7 @@ public class AI {
 				System.out.println(
 						"Please wrrite your flower in form of a.a,b.b,c.c....,Flower-Type. please mind that if you write too much/ too few values it will not work \n "
 								+ "the optimal number of values is " + list.get(0).values.length);
-				String flower = scan.next();
+				flower = scan.next();
 				write.write(flower + "\n");
 				write.flush();
 			}
@@ -103,9 +106,16 @@ public class AI {
 								: testing.type + " is real one, and the proposed one is " + proposedName(ar)
 										+ " this was your value");
 			}
+			if (flower != null) {
+				File fil = new File(filename);
+				List<String> out = Files.lines(fil.toPath()).filter(e -> !e.contains(flower))
+						.collect(Collectors.toList());
+				Files.write(fil.toPath(), out, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+			}
 
 			read.close();
 			write.close();
+
 			System.out.println(actual + " out of " + total + " \n in percentage it will be "
 					+ ((double) actual / total) * 100 + " %");
 		} catch (FileNotFoundException e) {
