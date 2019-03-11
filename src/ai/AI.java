@@ -22,6 +22,7 @@ import point.Point;
 public class AI {
 	private List<Point> list;
 	String flower = null;
+
 	public AI() {
 		list = new ArrayList<>(); // List of training flowers
 	}
@@ -62,7 +63,7 @@ public class AI {
 		}
 		int actual = 0;
 		int total = 0;
-	
+
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(new File(filename)));
 			BufferedWriter write = new BufferedWriter(new FileWriter(new File(filename), true));
@@ -101,10 +102,10 @@ public class AI {
 				for (String string : unique_type) {
 					System.out.print(string + " occured " + calOcur(string, ar) + "    ");
 				}
-				System.out.println(
-						line != null ? testing.type + " is real one, and the proposed one is " + proposedName(ar)
-								: testing.type + " is real one, and the proposed one is " + proposedName(ar)
-										+ " this was your value");
+				System.out.println(!line.equals(flower)
+						? testing.type + " is real one, and the proposed one is " + proposedName(ar)
+						: testing.type + " is real one, and the proposed one is " + proposedName(ar)
+								+ " this was your value");
 			}
 			if (flower != null) {
 				File fil = new File(filename);
